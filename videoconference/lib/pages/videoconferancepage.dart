@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:videoconference/pages/joinwithcode.dart';
 
-
-
 class Doctor {
   final String name;
   final String specialization;
@@ -15,7 +13,6 @@ class Doctor {
     required this.status,
   });
 }
-
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -41,7 +38,6 @@ class HomePage extends StatelessWidget {
     Get.to(JoinWithCode());
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,315 +54,202 @@ class HomePage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
-            child: Text(
-              'Your Doctors',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 234, 228, 221),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Divider(
-              color: Color.fromARGB(255, 234, 228, 221),
-              thickness: 2,
-            ),
-          ),
-          SingleChildScrollView(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double screenWidth = constraints.maxWidth;
+
+          return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Table(
-                border: TableBorder.all(
-                    color: const Color.fromARGB(0, 205, 194, 165)),
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TableRow(
-                    decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 196, 225, 255),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 48, 78, 111),
-                          width: 3.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    children: const [
-                       TableCell(
-                        verticalAlignment: TableCellVerticalAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Center(
-                            child: Text(
-                              'Name',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 48, 78, 111),
-                              ),
-                            ),
-                          ),
-                        ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                    child: Text(
+                      'Your Doctors',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 234, 228, 221),
                       ),
-                      TableCell(
-                        verticalAlignment: TableCellVerticalAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Center(
-                            child: Text(
-                            'Specialization',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: Color.fromARGB(255, 48, 78, 111),
-                            ),
-                          ),
-                          ),
-                        ),
-                      ),
-                      TableCell(
-                        verticalAlignment: TableCellVerticalAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Center(
-                            child: Text(
-                              'Status',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 48, 78, 111),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                  ...doctors.map((doctor) => TableRow(
-                        children: [
-                          TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () => _onDoctorPressed(doctor.name),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 220, 237, 255),
-                                ),
-                                child: Text(
-                                  doctor.name,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(255, 48, 78, 111),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text(
-                                doctor.specialization,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(255, 220, 237, 255),
-                                ),
-                              ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                width: 50,
-                                child: Center(
-                                  child: Text(
-                                    doctor.status,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color.fromARGB(255, 220, 237, 255),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Divider(
+                      color: Color.fromARGB(255, 234, 228, 221),
+                      thickness: 2,
+                    ),
+                  ),
+                  _buildDoctorTable(doctors, screenWidth),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(5, 20, 0, 0),
+                    child: Text(
+                      'Other Doctors',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 234, 228, 221),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Divider(
+                      color: Color.fromARGB(255, 234, 228, 221),
+                      thickness: 2,
+                    ),
+                  ),
+                  _buildDoctorTable(otherDoctors, screenWidth),
                 ],
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
-            child: Text(
-              'Other Doctors',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 234, 228, 221),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Divider(
-              color: Color.fromARGB(255, 234, 228, 221),
-              thickness: 2,
-            ),
-          ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Table(
-                border: TableBorder.all(
-                    color: const Color.fromARGB(0, 205, 194, 165)),
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children: [
-                  TableRow(
-                    decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 196, 225, 255),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 48, 78, 111),
-                          width: 3.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    children: const[
-                      TableCell(
-                        verticalAlignment: TableCellVerticalAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Center(
-                            child: Text(
-                              'Name',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 48, 78, 111),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      TableCell(
-                        verticalAlignment: TableCellVerticalAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Center(
-                            child: Text(
-                            'Specialization',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: Color.fromARGB(255, 48, 78, 111),
-                            ),
-                          ),
-                          ),
-                        ),
-                      ),
-                      TableCell(
-                        verticalAlignment: TableCellVerticalAlignment.middle,
-                        child: Padding(
-                          padding: EdgeInsets.all(9.0),
-                          child: Center(
-                            child: Text(
-                              'Status',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 48, 78, 111),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ...otherDoctors.map((doctor) => TableRow(
-                        children: [
-                          TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () => _onDoctorPressed(doctor.name),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 220, 237, 255),
-                                ),
-                                child: Text(
-                                  doctor.name,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color.fromARGB(255, 48, 78, 111),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text(
-                                doctor.specialization,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(255, 220, 237, 255),
-                                ),
-                              ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                width: 50,
-                                child: Center(
-                                  child: Text(
-                                    doctor.status,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color.fromARGB(255, 220, 237, 255),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
+    );
+  }
+
+  Widget _buildDoctorTable(List<Doctor> doctors, double screenWidth) {
+    bool isSmallScreen = screenWidth < 600;
+
+    return Table(
+      border: TableBorder.all(color: Colors.transparent),
+      columnWidths: isSmallScreen
+          ? null
+          : {
+              0: const FlexColumnWidth(1),
+              1: const FlexColumnWidth(2),
+              2: const FlexColumnWidth(1),
+            },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: [
+        TableRow(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 196, 225, 255),
+            border: Border.all(
+              color: const Color.fromARGB(255, 48, 78, 111),
+              width: 3.0,
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          children: const [
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: Padding(
+                padding: EdgeInsets.all(9.0),
+                child: Center(
+                  child: Text(
+                    'Name',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 48, 78, 111),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: Padding(
+                padding: EdgeInsets.all(9.0),
+                child: Center(
+                  child: Text(
+                    'Specialization',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 48, 78, 111),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            TableCell(
+              verticalAlignment: TableCellVerticalAlignment.middle,
+              child: Padding(
+                padding: EdgeInsets.all(9.0),
+                child: Center(
+                  child: Text(
+                    'Status',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 48, 78, 111),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        ...doctors.map((doctor) => TableRow(
+              children: [
+                TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () => _onDoctorPressed(doctor.name),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 220, 237, 255),
+                      ),
+                      child: Flexible(
+                        child: Text(
+                          doctor.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 48, 78, 111),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Flexible(
+                        child: Text(
+                          doctor.specialization,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 220, 237, 255),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        doctor.status,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromARGB(255, 220, 237, 255),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      ],
     );
   }
 }
